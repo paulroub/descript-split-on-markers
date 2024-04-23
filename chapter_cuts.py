@@ -1,16 +1,32 @@
 import datetime
 import json
 import locale
+import os
 import subprocess
-import time
+import sys
 
-xmlfn = "Superman again.mp4"
+PADDING_SECONDS = 1
+
+
+def secs_to_time_str(secs):
+    return str(datetime.timedelta(seconds=secs))
+
+
+if len(sys.argv) != 2:
+    print("Usage: python chapter_cuts.py <video_file>")
+    sys.exit(1)
+
+video_fn = sys.argv[1]
+
+if not os.path.isfile(video_fn):
+    print(f"Error: Video file {video_fn} does not exist.")
+    sys.exit(1)
 
 # Run ffprobe command to get chapter list
 command = [
     "ffprobe",
     "-i",
-    xmlfn,
+    video_fn,
     "-print_format",
     "json",
     "-show_chapters",
@@ -40,27 +56,22 @@ real_chapters = chapters[:-1]
 processes = []
 
 
-def secs_to_time_str(secs):
-    return str(datetime.timedelta(seconds=secs))
+for i, chapter in enumerate(real_chapters):
+    output_filename = f"{i + 1} - {chapter['title']}.mp4"
 
-
-for i in range(len(real_chapters)):
-    output_filename = f"{i + 1} - {real_chapters[i]['title']}.mp4"
-
-    initial_start = real_chapters[i]["start"]
-    initial_end = real_chapters[i]["end"]
-    padding_seconds = 1
-    padded_start = initial_start - 1
-    padded_end = initial_end + 1
+    initial_start = chapter["start"]
+    initial_end = chapter["end"]
+    padded_start = initial_start - PADDING_SECONDS
+    padded_end = initial_end + PADDING_SECONDS
 
     silence_1_start = padded_start
     silence_1_end = initial_start
     silence_2_start = initial_end
     silence_2_end = padded_end
 
-    af_param = f"volume=enable='between(t,{silence_1_start},{silence_1_end})':volume=0,afade=type=out:start_time={silence_2_start}:duration={padding_seconds}"
+    af_param = f"volume=enable='between(t,{silence_1_start},{silence_1_end})':volume=0,afade=type=out:start_time={silence_2_start}:duration={PADDING_SECONDS}"
 
-    # af_param = f"volume=enable='between(t,{silence_1_start},{silence_1_end})':volume=0,afade=type=out:start_time={silence_2_start}:duration={padding_seconds}"
+    # af_param = f"volume=enable='between(t,{silence_1_start},{silence_1_end})':volume=0,afade=type=out:start_time={silence_2_start}:duration={PADDING_SECONDS}"
 
     command = [
         "ffmpeg",
@@ -69,7 +80,7 @@ for i in range(len(real_chapters)):
         "error",
         "-y",
         "-i",
-        xmlfn,
+        video_fn,
         "-ss",
         secs_to_time_str(padded_start),
         "-to",
@@ -78,8 +89,6 @@ for i in range(len(real_chapters)):
         af_param,
         output_filename,
     ]
-
-    print(command)
 
     print(output_filename)
     processes.append(subprocess.Popen(command))
