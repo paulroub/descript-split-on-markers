@@ -6,14 +6,14 @@ This fits my typical workflow, but could definitely be generalized.
 
 The expected composition structure at export-from-Descript time:
 
-_stuff I don't want_
-**marker naming the first clip**
-_first clip_
-**marker naming the second clip**
-_second clip_
-_etc..._
-**end marker**
-_stuff I don't want_
+_stuff I don't want_  
+**marker naming the first clip**  
+_first clip_  
+**marker naming the second clip**  
+_second clip_  
+_etc..._  
+**end marker**  
+_stuff I don't want_  
 
 ## A Painfully Simple Example
 
