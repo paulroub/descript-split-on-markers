@@ -4,6 +4,13 @@ After using [Descript][descript] to trim out and pinpoint a sequence of speaker 
 
 This fits my typical workflow, but could definitely be generalized.
 
+## Prerequisites
+
+- [Python 3][python][^1]
+- [ffmpeg][ffmpeg]
+
+## Workflow
+
 The expected composition structure at export-from-Descript time:
 
 _stuff I don't want_  
@@ -25,7 +32,7 @@ I export the composition, being sure to include the markers as chapters:
 
 [![Descript video export, with "metadata" and "Include markers as chapters" enabled][exportimage]][exportimage]
 
-Run the `chapter_cuts.py` script:[^1]
+Run the `chapter_cuts.py` script:
 
 ```sh
 $ python3 chapter_cuts.py superman-composition.mp4
@@ -45,5 +52,7 @@ To give some breathing room when using these clips latter, each starts one secon
 [markerimage]: i/markers.png
 [exportimage]: i/export.png
 [clipsimage]: i/clips.png
+[ffmpeg]: https://ffmpeg.org/
+[python]: https://www.python.org/
 
 [^1]: No external modules are needed with stock macOS or Homebrew Python 3, at least, so while a virtual environment would be fine, it's not strictly necessary.
