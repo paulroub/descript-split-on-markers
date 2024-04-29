@@ -90,4 +90,4 @@ for i, chapter in enumerate(real_chapters):
     ]
 
     print(output_filename)
-    subprocess.run(command)
+    subprocess.run(command, check=True)
