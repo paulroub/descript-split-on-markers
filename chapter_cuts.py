@@ -17,6 +17,7 @@ if len(sys.argv) != 2:
     sys.exit(1)
 
 video_fn = sys.argv[1]
+dest_dir = os.path.dirname(video_fn)
 
 if not os.path.isfile(video_fn):
     print(f"Error: Video file {video_fn} does not exist.")
@@ -57,7 +58,7 @@ processes = []
 
 
 for i, chapter in enumerate(real_chapters):
-    output_filename = f"{i + 1} - {chapter['title']}.mp4"
+    output_filename = os.path.join(dest_dir, f"{i + 1} - {chapter['title']}.mp4")
 
     initial_start = chapter["start"]
     initial_end = chapter["end"]
@@ -70,8 +71,6 @@ for i, chapter in enumerate(real_chapters):
     silence_2_end = padded_end
 
     af_param = f"volume=enable='between(t,{silence_1_start},{silence_1_end})':volume=0,afade=type=out:start_time={silence_2_start}:duration={PADDING_SECONDS}"
-
-    # af_param = f"volume=enable='between(t,{silence_1_start},{silence_1_end})':volume=0,afade=type=out:start_time={silence_2_start}:duration={PADDING_SECONDS}"
 
     command = [
         "ffmpeg",
