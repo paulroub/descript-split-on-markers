@@ -90,7 +90,4 @@ for i, chapter in enumerate(real_chapters):
     ]
 
     print(output_filename)
-    processes.append(subprocess.Popen(command))
-
-for process in processes:
-    process.wait()
+    subprocess.run(command)
