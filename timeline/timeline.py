@@ -8,12 +8,20 @@ def get_clips(xml_fn):
     markers = tree.findall('.//marker')
 
     clips = []
+    last_clip = None
 
-    for marker in markers[:-1]:
+    for marker in markers:
+        in_point = float(marker.find('in').text)
+
         clip = {
             'source_file': files[0].text,
+            'start': float(in_point),
         }
 
-        clips.append(clip)
+        if last_clip:
+            last_clip['end'] = float(in_point)
 
-    return clips
+        clips.append(clip)
+        last_clip = clip
+
+    return clips[:-1]
