@@ -39,3 +39,12 @@ def test_second_clip_times():
     assert clips[0]['end'] == 739.0
     assert clips[1]['start'] == 739.0
     assert clips[1]['end'] == 789.0
+
+def test_multi_part_clips():
+    xml_fn = 'test_data/clip-across-edits.xml'
+    clips = timeline.get_clips(xml_fn)
+
+    assert clips[0]['start'] == 0.0
+    assert clips[0]['end'] == 357.0
+
+    assert len(clips[0]['parts']) == 5
