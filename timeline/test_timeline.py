@@ -17,7 +17,7 @@ def test_correct_source_file_name():
     xml_fn = 'test_data/full.xml'
     clips = timeline.get_clips(xml_fn)
 
-    assert clips[0]['source_file'] == 'Superman.mp4'
+    assert clips[0]['parts'][0]['source_file'] == 'Superman.mp4'
 
 def test_first_clip_start():
     xml_fn = 'test_data/full.xml'
